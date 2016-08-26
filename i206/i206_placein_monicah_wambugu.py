@@ -25,19 +25,16 @@ def first_characters(ln):
     end = 0
     first_characters = ''
     allowed_decimals = 0
-    if is_int_or_float(ln):
-        return ln
-    else:
-        while end == 0:
-            for character in ln:
-                if end == 0:
-                    if is_int_or_float(character) :
-                        first_characters = first_characters +character
-                    elif str(character) == '.' and allowed_decimals ==0:
-                       first_characters = first_characters +character
-                       allowed_decimals = 1              
-                    else:
-                        end=1
+    while end == 0:
+        for character in ln:
+            if end == 0:
+                if is_int_or_float(character) :
+                    first_characters = first_characters +character
+                elif str(character) == '.' and allowed_decimals ==0:
+                   first_characters = first_characters +character
+                   allowed_decimals = 1              
+                else:
+                    end=1
                     
     return first_characters
 
@@ -53,37 +50,6 @@ def next_character(ln,last_index):
         
     return next_character
 
-
-def main_(ln_list):
-    stop = False
-    for x in ln_list:
-        while stop == False :
-            if first_check[0] == True:
-                print('First check passed')
-            else:
-                print('First check failed')
-
-x = ['3.0','3garbage']
-
-main_(x)
-
-#First check is if the leading characters are real numbers or integers
-def first_check(ln):
-    fc = first_characters(ln)
-    if is_int_or_float(fc):
-        return True,len(fc)
-    else:
-        return False,None
-            
-    
-def second_check(ln,last_index):
-    nc = next_character(ln, last_index)
-    if nc ==' ' or nc == None:
-        return True
-    else:
-        return False
-        
-
 #Distinguishes between -ve numbers, text and -999
 def other_numbers(ln):
     try:
@@ -97,25 +63,74 @@ def other_numbers(ln):
     except ValueError:
         return 'Invalid-possible a string'
 
+#first check is to find out if the entire string is a +/-ve integer/float or if it is a string
+def first_check(ln):
+    if is_int_or_float(ln):
+        #+/-ve integer/float
+        return 'integer'
+    else:
+        return'string'
 
-print(other_numbers('gdgdgdgd'))
-print(other_numbers('-12'))
-print(other_numbers('-999'))
-
-
+#second check is to find out if the string has  leading characters that are real numbers or integers
+def second_check(ln):
+    fc = first_characters(ln)
+    if is_int_or_float(fc):
+        return True,len(fc)
+    else:
+        return False,None
+            
+#third check is to find out if the next character after the integers/floats is a space
+def third_check(ln,last_index):
+    nc = next_character(ln, last_index)
+    if nc ==' ' or nc == None:
+        return True
+    else:
+        return False
         
-'''
-print( '3garbage'+ ' '+str(valid_number('3garbage')))
-print('3.05garbage'+ ' '+str(valid_number('3.05garbage')))
-print('3.55.4433'+ ' '+str(valid_number('3.55.4433')))
-print('34444'+ ' '+str(valid_number('34444')))
-print('3.667'+ ' '+str(valid_number('3.667')))
+
+def validate(ln_list):
+    stop = False
+    valid_numbers = []
+    while stop == False:
+        for x in ln_list:
+            if first_check(x) == 'string':
+                #do the 2nd check
+                sc = second_check(x)
+                if sc[0]:
+                    if third_check(x,sc[1]):
+                        print (str(x) +' to the mean!!!')
+                        valid_numbers.append(float(x))
+                        exit
+                    else:
+                        print ('Though string starts with integer it is not a valid integer/float')
+                else:
+                    print('Likely to be a string with text characters')
+            else: #is a +/-ve integer
+                if float(x) >0:
+                    print (str(x) +' to the mean!!!')
+                    valid_numbers.append(float(x))
+                else:                    
+                    others = other_numbers(x)
+                    if others == 'Terminator':
+                        stop = True
+                        print('terminator')
+                    else:
+                        print('Other negative invalid numbers-ignore this')
+        return valid_numbers
+
+def mean(my_list):
+    my_sum = float(sum(my_list))
+    mean = float(my_sum/len(my_list))
+    return mean
 
 
-print('555 444'+ ' '+str(valid_number('555 444')))
-print('555 '+ ' '+str(valid_number('555 ')))
 
-'''
+#print(validate(['-999']))
+#print(validate(['3','3.05','3garbage','hdhdgdggd','555','563 ','3.5.3']))
+print(mean([3.0, 3.05, 555.0, 563.0]))
+
+#print(first_check('3garbage'))
+
 
 
 
