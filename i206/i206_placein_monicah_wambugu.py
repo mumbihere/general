@@ -9,11 +9,16 @@ def is_int_or_float(n):
 
 '''
 Read all characters in the string that are integers or floats
-first_characters('3garbage')   return 3
-first_characters('3.05garbage')   return 3.05
-first_characters('3.55.4433')   return 3.55
-first_characters('34444')   return 34444
-first_characters('gdgdgd')   return  empty
+first_characters('3garbage')   returns 3
+first_characters('3.05garbage')   returns 3.05
+first_characters('3.55.4433')   returns 3.55
+first_characters('34444')   returns 34444
+first_characters('555 444')   returns  555
+first_characters('555 ')   returns  555 
+
+first_characters('gdgdgd')   returns  empty
+first_characters('-999')   returns  empty
+
 
 '''
 def first_characters(ln):
@@ -37,11 +42,61 @@ def first_characters(ln):
     return first_characters
 
 
-print(len(first_characters('-999s'))) 
+
+#Returns the next character after the integers or float numbers
+def next_character(ln):
+    fc = first_characters(ln)
+    if is_int_or_float(fc):
+        try:
+            next_character = ln[len(fc)]
+        except IndexError:
+            next_character = None
+            
+        return next_character
+
+def valid_number(ln):
+    nc = next_character(ln)
+    if nc ==' ' or nc == None:
+        return True
+    else:
+        return False
+        
+
+#Distinguishes between -ve numbers, text and -999
+def other_numbers(ln):
+    try:
+        x = is_int_or_float(ln)
+        print(x)
+        if x:
+            ln = float(ln) 
+            if ln<0:
+                if ln == -999:
+                    return 'Terminator'
+                else:
+                    return 'Invalid- negative number'
+        
+    except ValueError:
+        return 'Invalid-possible a string'
 
 
+print(other_numbers('gdgdgdgd'))
+print(other_numbers('-12'))
+print(other_numbers('-999'))
 
 
+        
+'''
+print( '3garbage'+ ' '+str(valid_number('3garbage')))
+print('3.05garbage'+ ' '+str(valid_number('3.05garbage')))
+print('3.55.4433'+ ' '+str(valid_number('3.55.4433')))
+print('34444'+ ' '+str(valid_number('34444')))
+print('3.667'+ ' '+str(valid_number('3.667')))
+
+
+print('555 444'+ ' '+str(valid_number('555 444')))
+print('555 '+ ' '+str(valid_number('555 ')))
+
+'''
 
 
 
