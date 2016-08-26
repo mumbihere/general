@@ -44,18 +44,40 @@ def first_characters(ln):
 
 
 #Returns the next character after the integers or float numbers
-def next_character(ln):
+def next_character(ln,last_index):
+    try:
+        #next_character = ln[len(fc)]
+        next_character = ln[last_index]
+    except IndexError:
+        next_character = None
+        
+    return next_character
+
+
+def main_(ln_list):
+    stop = False
+    for x in ln_list:
+        while stop == False :
+            if first_check[0] == True:
+                print('First check passed')
+            else:
+                print('First check failed')
+
+x = ['3.0','3garbage']
+
+main_(x)
+
+#First check is if the leading characters are real numbers or integers
+def first_check(ln):
     fc = first_characters(ln)
     if is_int_or_float(fc):
-        try:
-            next_character = ln[len(fc)]
-        except IndexError:
-            next_character = None
+        return True,len(fc)
+    else:
+        return False,None
             
-        return next_character
-
-def valid_number(ln):
-    nc = next_character(ln)
+    
+def second_check(ln,last_index):
+    nc = next_character(ln, last_index)
     if nc ==' ' or nc == None:
         return True
     else:
@@ -65,15 +87,12 @@ def valid_number(ln):
 #Distinguishes between -ve numbers, text and -999
 def other_numbers(ln):
     try:
-        x = is_int_or_float(ln)
-        print(x)
-        if x:
-            ln = float(ln) 
-            if ln<0:
-                if ln == -999:
-                    return 'Terminator'
-                else:
-                    return 'Invalid- negative number'
+        ln = float(ln)
+        if ln<0:
+            if ln == -999:
+                return 'Terminator'
+            else:
+                return 'Invalid- negative number'
         
     except ValueError:
         return 'Invalid-possible a string'
