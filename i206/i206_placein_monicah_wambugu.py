@@ -1,5 +1,22 @@
+'''
+This program does the following:
+1. Reads rainfall.txt and converts it to a list
+2. Validates the elements of the list
+3. Calculates the mean
+4. Prints out the mean
 
+Includes an optional log file description.log
+'''
 
+LOG_FILENAME = 'description.log'
+
+#writes description message into logfile 
+def logging(msg):
+    import logging
+    logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+    logging.info(msg)
+
+    
 #reads the file and converts to a list
 def read_file(filename):
     f = open(filename, 'r')
@@ -91,24 +108,21 @@ def validate(ln_list):
                     sc = second_check(x)
                     if sc[0]:
                         if third_check(x,len(sc[1])):
-                            print (str(x) +' to the mean!!!')
                             valid_numbers.append(float(sc[1]))
                             exit
                         else:
-                            print ('Though string starts with integer it is not a valid integer/float')
+                            logging('Though '+str(x)+' starts with integer it is not a valid integer/float')
                     else:
-                        print('Likely to be a string with text characters')
+                        logging(str(x)+' is an invalid string with text characters')
                 else: #is a +/-ve integer
                     if float(x) >=0:
-                        print (str(x) +' to the mean!!!')
                         valid_numbers.append(float(x))
                     else:                    
                         others = other_numbers(x)
                         if others == 'Terminator':
                             stop = True
-                            print('terminator')
                         else:
-                            print('Other negative invalid numbers-ignore this')
+                            logging(str(x)+' is an invalid negative number that is ignored')
         return valid_numbers
     
 #calculates the mean given a list
@@ -118,9 +132,10 @@ def mean(my_list):
         return None
     else:
         return float(my_sum/len(my_list))
-    
+
 
 def main(filename):
+    
     #reads the file and converts to a list
     my_list = read_file(filename)
 
@@ -136,72 +151,12 @@ def main(filename):
     
 
 if __name__ == '__main__':
-    main('rainfall 6.txt')
-
-
-print(first_check('2 100'))
-
-#print(validate(['-999']))
-#print(validate(['3','3.05','3garbage','hdhdgdggd','555','563 ','3.5.3']))
-#print(mean([3.0, 3.05, 555.0, 563.0]))
-
-#print(first_check('3garbage'))
+    main('rainfall.txt')
 
 
 
 
 
-
-
-
-
-
-
-
-
-#If the line begins with a real number or integer followed by a space, use that value and ignore the rest of whatever is on that line.
-#Real numbers include integers,floats/fractions
-
-
-
-
-'''
-if len(first_characters('2222hdhhd')) == 0:
-
-
-1.read a file called rainfall.txt (assumed to be in the current directory the program is running in).
-rainfall.txt consists of a list of real numbers or integers that represent rainfall observed on different days (one number per line).
-
-If the line begins with a real number or integer followed by a space, use that value and ignore the rest of whatever is on that line.
-The list ends when the file ends or when the number -999 appears on a line -- whichever comes first!
-
-Your task is to take the non-negative numbers (negative numbers are a mistake) and average them to come up with the average rainfall. You should output
-
-Average rainfall = X inches
-
-or an appropriate error message
-
-This problem is trickier than it seems. Your program should be robust even when the input is not in the form expected. Here are some examples
-
-
-
-
-#1.Read the file
-
-
-
-for line in f:
-    print(line)
-print(f.size())
-#2.Clean the data
-
-#3. Output the mean
-
-
-
-
-
-'''
 
 
 

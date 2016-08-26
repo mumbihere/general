@@ -1,0 +1,6 @@
+INFO:root:Though 3garbage starts with integer it is not a valid integer/float
+INFO:root:this is some text 4 is likely to be a string with text characters
+INFO:root:Though 3garbage starts with integer it is not a valid integer/float
+INFO:root:this is some text 4 is an invalid string with text characters
+INFO:root:-1 is an invalid negative number that is ignored
+INFO:root:-2 is an invalid negative number that is ignored
