@@ -1,4 +1,11 @@
 
+
+#reads the file and converts to a list
+def read_file(filename):
+    f = open(filename, 'r')
+    return [e.rstrip() for e in list(f)]
+
+
 #returns true if a number is an integer or a float
 def is_int_or_float(n):
     try:
@@ -7,24 +14,11 @@ def is_int_or_float(n):
     except ValueError:
         return False
 
-'''
-Read all characters in the string that are integers or floats
-first_characters('3garbage')   returns 3
-first_characters('3.05garbage')   returns 3.05
-first_characters('3.55.4433')   returns 3.55
-first_characters('34444')   returns 34444
-first_characters('555 444')   returns  555
-first_characters('555 ')   returns  555 
-
-first_characters('gdgdgd')   returns  empty
-first_characters('-999')   returns  empty
-
-
-'''
+#returns the leading interger/float characters of a string
 def first_characters(ln):
     end = 0
     first_characters = ''
-    allowed_decimals = 0
+    allowed_decimals = 0 #to handle strings such as 3.583.56
     while end == 0:
         for character in ln:
             if end == 0:
@@ -35,9 +29,7 @@ def first_characters(ln):
                    allowed_decimals = 1              
                 else:
                     end=1
-                    
     return first_characters
-
 
 
 #Returns the next character after the integers or float numbers
@@ -75,7 +67,7 @@ def first_check(ln):
 def second_check(ln):
     fc = first_characters(ln)
     if is_int_or_float(fc):
-        return True,len(fc)
+        return True,fc
     else:
         return False,None
             
@@ -93,41 +85,65 @@ def validate(ln_list):
     valid_numbers = []
     while stop == False:
         for x in ln_list:
-            if first_check(x) == 'string':
-                #do the 2nd check
-                sc = second_check(x)
-                if sc[0]:
-                    if third_check(x,sc[1]):
+            if stop ==False:               
+                if first_check(x) == 'string':
+                    #do the 2nd check
+                    sc = second_check(x)
+                    if sc[0]:
+                        if third_check(x,len(sc[1])):
+                            print (str(x) +' to the mean!!!')
+                            valid_numbers.append(float(sc[1]))
+                            exit
+                        else:
+                            print ('Though string starts with integer it is not a valid integer/float')
+                    else:
+                        print('Likely to be a string with text characters')
+                else: #is a +/-ve integer
+                    if float(x) >=0:
                         print (str(x) +' to the mean!!!')
                         valid_numbers.append(float(x))
-                        exit
-                    else:
-                        print ('Though string starts with integer it is not a valid integer/float')
-                else:
-                    print('Likely to be a string with text characters')
-            else: #is a +/-ve integer
-                if float(x) >0:
-                    print (str(x) +' to the mean!!!')
-                    valid_numbers.append(float(x))
-                else:                    
-                    others = other_numbers(x)
-                    if others == 'Terminator':
-                        stop = True
-                        print('terminator')
-                    else:
-                        print('Other negative invalid numbers-ignore this')
+                    else:                    
+                        others = other_numbers(x)
+                        if others == 'Terminator':
+                            stop = True
+                            print('terminator')
+                        else:
+                            print('Other negative invalid numbers-ignore this')
         return valid_numbers
-
+    
+#calculates the mean given a list
 def mean(my_list):
     my_sum = float(sum(my_list))
-    mean = float(my_sum/len(my_list))
-    return mean
+    if len(my_list) == 0:
+        return None
+    else:
+        return float(my_sum/len(my_list))
+    
+
+def main(filename):
+    #reads the file and converts to a list
+    my_list = read_file(filename)
+
+    #validate the resulting list above
+    valid_list = validate(my_list)
+
+    #pass the list for mean calculation
+    average = mean(valid_list)
+    if average == None:
+        print('There are no valid rainfall inputs')
+    else:
+        print('Average rainfall = ' + str(average) + ' inches')
+    
+
+if __name__ == '__main__':
+    main('rainfall 6.txt')
 
 
+print(first_check('2 100'))
 
 #print(validate(['-999']))
 #print(validate(['3','3.05','3garbage','hdhdgdggd','555','563 ','3.5.3']))
-print(mean([3.0, 3.05, 555.0, 563.0]))
+#print(mean([3.0, 3.05, 555.0, 563.0]))
 
 #print(first_check('3garbage'))
 
@@ -172,8 +188,7 @@ This problem is trickier than it seems. Your program should be robust even when 
 
 #1.Read the file
 
-f = open('rainfall 1.txt', 'r')
-#print(list(f))
+
 
 for line in f:
     print(line)
